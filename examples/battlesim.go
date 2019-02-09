@@ -41,7 +41,7 @@ func CreateHuman() (obj *BasicWarrior) {
 	return
 }
 
-// Run runs the simulation to completion
+// RunBattleSim runs the simulation to completion
 func RunBattleSim() {
 	env := new(ecms.Environment)
 	env.AddSystem(systems.Battle())
@@ -59,5 +59,14 @@ func RunBattleSim() {
 		updateMod.Perform()
 	}
 
-	fmt.Printf("%v\n", systems.Battle().Dead)
+	placements := 5
+	fmt.Printf("Top %v:\n", placements)
+	for ind, warrior := range systems.Battle().Dead[len(systems.Battle().Dead)-placements : len(systems.Battle().Dead)] {
+		place := placements - ind
+		strct, ok := warrior.(*BasicWarrior)
+		if ok {
+			fmt.Printf("#%v: %+v\n", place, strct.UID())
+			fmt.Printf("\t%+v\n", strct.BattleStatsComponent())
+		}
+	}
 }

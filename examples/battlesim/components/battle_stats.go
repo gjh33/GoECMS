@@ -2,7 +2,7 @@ package components
 
 // BattleStatsComponent is used to identify that an entity has battle stats
 type BattleStatsComponent interface {
-	BattleStats() *BattleStats
+	BattleStatsComponent() *BattleStats
 }
 
 // BattleStats represents this entity's history in battle
@@ -12,7 +12,7 @@ type BattleStats struct {
 	TotalDamageReceived float32
 }
 
-// BattleStats implements BattleStatsComponent
-func (stats *BattleStats) BattleStats() *BattleStats {
+// BattleStatsComponent implements BattleStatsComponent
+func (stats *BattleStats) BattleStatsComponent() *BattleStats {
 	return stats
 }

@@ -1,6 +1,7 @@
 package systems
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -57,11 +58,11 @@ func (system *BattleSystem) ResetSimulation() {
 	// Since we know an exact cap on the size, and any simulation running to completion will
 	// fill up both slices at one point, we should just automatically size to number of warriors
 	system.Alive = make([]entities.WarriorEntity, 0, len(system.Warriors))
-	system.Alive = make([]entities.WarriorEntity, 0, len(system.Warriors))
+	system.Dead = make([]entities.WarriorEntity, 0, len(system.Warriors))
 
 	for _, warrior := range system.Warriors {
 		if warrior.Enabled() {
-			warrior.Health().Current = warrior.Health().Max
+			warrior.HealthComponent().Current = warrior.HealthComponent().Max
 			system.Alive = append(system.Alive, warrior)
 		}
 	}
@@ -72,20 +73,20 @@ func (system *BattleSystem) SimulateRandomFight() {
 	w1, w2 := system.pickTwoAlive()
 
 	// Update Data
-	w1.Health().Current -= w2.Weapon().Damage
-	w2.Health().Current -= w1.Weapon().Damage
-	w1.BattleStats().FightCount++
-	w2.BattleStats().FightCount++
-	w1.BattleStats().TotalDamageDealt += w1.Weapon().Damage
-	w2.BattleStats().TotalDamageDealt += w2.Weapon().Damage
-	w1.BattleStats().TotalDamageReceived += w2.Weapon().Damage
-	w2.BattleStats().TotalDamageReceived += w1.Weapon().Damage
+	w1.HealthComponent().Current -= w2.WeaponComponent().Damage
+	w2.HealthComponent().Current -= w1.WeaponComponent().Damage
+	w1.BattleStatsComponent().FightCount++
+	w2.BattleStatsComponent().FightCount++
+	w1.BattleStatsComponent().TotalDamageDealt += w1.WeaponComponent().Damage
+	w2.BattleStatsComponent().TotalDamageDealt += w2.WeaponComponent().Damage
+	w1.BattleStatsComponent().TotalDamageReceived += w2.WeaponComponent().Damage
+	w2.BattleStatsComponent().TotalDamageReceived += w1.WeaponComponent().Damage
 
 	// System internals
-	if w1.Health().Current <= 0 {
+	if w1.HealthComponent().Current <= 0 {
 		system.kill(w1)
 	}
-	if w2.Health().Current <= 0 {
+	if w2.HealthComponent().Current <= 0 {
 		system.kill(w2)
 	}
 }
@@ -97,6 +98,7 @@ func (system *BattleSystem) pickTwoAlive() (entities.WarriorEntity, entities.War
 	// If number rolled is >= ind1, then increment it.
 	// This ensures a unique pair
 	ind2 := system.rng.Intn(len(system.Alive) - 1)
+	fmt.Println(ind1, " | ", ind2)
 	if ind2 >= ind1 {
 		ind2++
 	}

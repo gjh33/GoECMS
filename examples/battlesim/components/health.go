@@ -2,7 +2,7 @@ package components
 
 // HealthComponent is used to identify that an entity has health
 type HealthComponent interface {
-	Health() *Health
+	HealthComponent() *Health
 }
 
 // Health is the data behind the health component
@@ -11,7 +11,7 @@ type Health struct {
 	Current float32
 }
 
-// Health implements HealthComponent interface
-func (health *Health) Health() *Health {
+// HealthComponent implements HealthComponent interface
+func (health *Health) HealthComponent() *Health {
 	return health
 }

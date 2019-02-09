@@ -2,7 +2,7 @@ package components
 
 // WeaponComponent is used to identify that an entity has a weapon
 type WeaponComponent interface {
-	Weapon() *Weapon
+	WeaponComponent() *Weapon
 }
 
 // Weapon represents how much damage an entity can do in battle
@@ -12,7 +12,7 @@ type Weapon struct {
 	Damage float32
 }
 
-// Weapon implements WeaponComponent
-func (weapon *Weapon) Weapon() *Weapon {
+// WeaponComponent implements WeaponComponent
+func (weapon *Weapon) WeaponComponent() *Weapon {
 	return weapon
 }
